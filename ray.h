@@ -18,7 +18,7 @@ public:
 
 private:
     point3 orig;
-    point3 dir;
+    vec3 dir;
 };
 
 #endif
