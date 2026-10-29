@@ -2,21 +2,30 @@
 #include "ray.h"
 #include "vec3.h"
 
+#include <cmath>
 #include <iostream>
 
-bool hit_sphere(const point3& center, double radius, const ray& r) {
+double hit_sphere(const point3& center, double radius, const ray& r) {
     auto center_vector = (center - r.origin());
     auto a = dot(r.direction(), r.direction());
     auto b = dot(-2.0 * r.direction(), center_vector);
     auto c = dot(center_vector, center_vector) - radius * radius;
 
     auto discriminant = b*b - 4*a*c;
-    return (discriminant >= 0);
+
+    if (discriminant < 0.0) {
+        return -1.0;
+    } else {
+        return (-b - std::sqrt(discriminant)) / (2.0 * a);
+    }
 }
 
 color ray_color(const ray& r) {
-    if (hit_sphere(point3(0, 0, -1.0), 0.5, r))
-        return color(1.0, 0.0, 0.0);
+    auto t = hit_sphere(point3(0, 0, -1.0), 0.5, r);
+    if (t > 0.0) {
+        vec3 N = unit_vector(r.at(t) - vec3(0.0, 0.0, -1.0));
+        return 0.5*color(N.x()+1, N.y()+1, N.z()+1);
+    }
 
     auto unit_direction = unit_vector(r.direction());
     auto a = 0.5*(unit_direction.y() + 1.0);
@@ -60,7 +69,7 @@ int main() {
         for (int i = 0; i < image_width; ++i) {
             auto pixel_center = pixel00_loc + (i * pixel_delta_u) + (j * pixel_delta_v);
             auto ray_direction = pixel_center - camera_center;
-            ray r(pixel_center, ray_direction);
+            ray r(camera_center, ray_direction);
 
             color pixel_color = ray_color(r);
             write_color(std::cout, pixel_color);
