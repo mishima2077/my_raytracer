@@ -7,22 +7,26 @@
 
 double hit_sphere(const point3& center, double radius, const ray& r) {
     auto center_vector = (center - r.origin());
-    auto a = dot(r.direction(), r.direction());
-    auto b = dot(-2.0 * r.direction(), center_vector);
-    auto c = dot(center_vector, center_vector) - radius * radius;
+    auto a = r.direction().length_squared();
+    // Simplified for b = -2h
+    auto h = dot(r.direction(), center_vector);
+    auto c = center_vector.length_squared() - radius * radius;
 
-    auto discriminant = b*b - 4*a*c;
+    auto discriminant = h*h - a*c;
 
     if (discriminant < 0.0) {
         return -1.0;
     } else {
-        return (-b - std::sqrt(discriminant)) / (2.0 * a);
+        // Currently even the spheres behind the camera returns a hit,
+        // we will address that issue later, for now we just take the closest hit
+        return (h - std::sqrt(discriminant)) / a;
     }
 }
 
 color ray_color(const ray& r) {
     auto t = hit_sphere(point3(0, 0, -1.0), 0.5, r);
     if (t > 0.0) {
+        // Normal vector from the center of the sphere to hit point
         vec3 N = unit_vector(r.at(t) - vec3(0.0, 0.0, -1.0));
         return 0.5*color(N.x()+1, N.y()+1, N.z()+1);
     }
