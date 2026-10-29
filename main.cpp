@@ -4,7 +4,20 @@
 
 #include <iostream>
 
+bool hit_sphere(const point3& center, double radius, const ray& r) {
+    auto center_vector = (center - r.origin());
+    auto a = dot(r.direction(), r.direction());
+    auto b = dot(-2.0 * r.direction(), center_vector);
+    auto c = dot(center_vector, center_vector) - radius * radius;
+
+    auto discriminant = b*b - 4*a*c;
+    return (discriminant >= 0);
+}
+
 color ray_color(const ray& r) {
+    if (hit_sphere(point3(0, 0, -1.0), 0.5, r))
+        return color(1.0, 0.0, 0.0);
+
     auto unit_direction = unit_vector(r.direction());
     auto a = 0.5*(unit_direction.y() + 1.0);
     return (1.0-a)*color(1.0, 1.0, 1.0) + a*color(0.5, 0.7, 1.0);
@@ -17,7 +30,7 @@ int main() {
     // Set image width and height
 
     auto aspect_ratio = 16.0 / 9.0;
-    int image_width = 400;
+    int image_width = 1400;
     int image_height = int(image_width / aspect_ratio);
     image_height = (image_height < 1) ? 1 : image_height;
 
