@@ -3,7 +3,9 @@
 #include "vec3.h"
 
 #include <cmath>
+#include <fstream>
 #include <iostream>
+#include <string>
 
 double hit_sphere(const point3& center, double radius, const ray& r) {
     auto center_vector = (center - r.origin());
@@ -36,7 +38,27 @@ color ray_color(const ray& r) {
     return (1.0-a)*color(1.0, 1.0, 1.0) + a*color(0.5, 0.7, 1.0);
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+
+    // TODO: Improve here, currently just ".ppm" is accepted as a filename
+    std::string filename;
+    if (argc == 1) {
+        filename = "image.ppm";
+    } else {
+        std::string candidate_file = argv[1];
+        if (candidate_file.length() >= 4 && candidate_file.rfind(".ppm") == candidate_file.length() - 4)
+            filename = candidate_file;
+        else {
+            std::cerr << "Provided output file must have the extension .ppm !" << std::endl;
+            return 1;
+        }
+    }
+
+    std::ofstream output_file(filename);
+    if (!output_file.is_open()) {
+        std::cerr << "Failed to open the file: " << filename << std::endl;
+        return 1;
+    }
 
     // Image
 
@@ -66,7 +88,7 @@ int main() {
     auto viewport_upper_left = camera_center - vec3(0, 0, focal_length) - viewport_u/2 - viewport_v/2;
     auto pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
 
-    std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+    output_file << "P3\n" << image_width << ' ' << image_height << "\n255\n";
 
     for (int j = 0; j < image_height; ++j) {
         std::clog << "\rScanlines remaining: " << (image_height - j) << ' ' << std::flush;
@@ -76,10 +98,11 @@ int main() {
             ray r(camera_center, ray_direction);
 
             color pixel_color = ray_color(r);
-            write_color(std::cout, pixel_color);
+            write_color(output_file, pixel_color);
         }
     }
 
     std::clog << "\rDone.                 \n";
+    output_file.close();
     return 0;
 }
