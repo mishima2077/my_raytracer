@@ -2,6 +2,7 @@
 #define SPHERE_H
 
 #include "hittable.h"
+#include "interval.h"
 #include <cmath>
 #include <cstdint>
 
@@ -9,7 +10,7 @@ class sphere: public hittable {
 public:
     sphere(const point3& center, double radius): center(center), radius(std::fmax(0, radius)) {}
 
-    bool hit(const ray& r, double ray_tmin, double ray_tmax, hit_record& rec) const override {
+    bool hit(const ray& r, interval ray_t, hit_record& rec) const override {
         auto center_vector = (center - r.origin());
         auto a = r.direction().length_squared();
         // Simplified for b = -2h
@@ -24,9 +25,9 @@ public:
         auto root = (h - sqrtd) / a;
 
         // If the smaller hit is not within desired range, try with the other
-        if (ray_tmin >= root || root >= ray_tmax) {
+        if (!ray_t.surrounds(root)) {
             root  = (h + sqrtd) / a;
-            if (ray_tmin >= root || root >= ray_tmax) {
+            if (!ray_t.surrounds(root)) {
                 return false;
             }
         }
