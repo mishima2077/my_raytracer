@@ -1,6 +1,7 @@
 #ifndef RTUTIL_H
 #define RTUTIL_H
 
+#include <cstdlib>
 #include <cmath>
 #include <iostream>
 #include <limits>
@@ -16,11 +17,14 @@ inline double degrees_to_radians(double degrees) {
     return degrees * pi / 180.0;
 }
 
-// Common headers
+// Returns a random real number in [0,1).
+inline double random_double() {
+    return std::rand() / (RAND_MAX + 1.0);
+}
 
-#include "color.h"
-#include "interval.h"
-#include "ray.h"
-#include "vec3.h"
+// Returns a random real number in [min, max).
+inline double random_double(double min, double max) {
+    return (max-min)*random_double() + min;
+}
 
 #endif // !RTUTIL_H

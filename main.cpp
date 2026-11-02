@@ -1,13 +1,12 @@
-#include "sphere.h"
-#include "hittable.h"
-#include "hittable_list.h"
 #include "camera.h"
-#include "rtutil.h"
+#include "hittable_list.h"
+#include "sphere.h"
 
-#include <cmath>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <string>
+
 
 int main(int argc, char *argv[]) {
 
@@ -34,6 +33,7 @@ int main(int argc, char *argv[]) {
     camera cam;
     cam.aspect_ratio = 16.0 / 9.0;
     cam.image_width = 2560;
+    cam.samples_per_pixel = 100;
 
     cam.render(output_file, world);
 
