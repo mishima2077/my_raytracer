@@ -12,6 +12,7 @@ class camera {
     double aspect_ratio      = 1.0;  // Ratio of width over height
     int    image_width       = 100;  // Rendered image width
     int    samples_per_pixel = 10;   // Number of random samples taken for each pixel
+    int    max_depth         = 10;   // Maximum number of ray bounces in the scene
 
     void render(std::ostream& output_file, const hittable& world) {
         initialize();
@@ -26,7 +27,7 @@ class camera {
                     ray r = get_ray(i, j);
 
                     // ??
-                    pixel_color += ray_color(r, world);
+                    pixel_color += ray_color(r, max_depth, world);
                 }
 
                 write_color(output_file, pixel_samples_scale * pixel_color);
@@ -88,11 +89,21 @@ class camera {
         return vec3(random_double() - 0.5, random_double() - 0.5, 0.0);
     }
 
-    color ray_color(const ray& r, const hittable& world) const {
+    color ray_color(const ray& r, int depth, const hittable& world) const {
+        if (depth <= 0)
+            return color(0, 0, 0);
+
         hit_record rec;
-        if (world.hit(r, interval(0, infinity), rec)) {
-            vec3 direction = random_on_hemisphere(rec.normal);
-            return 0.5 * ray_color(ray(rec.p, direction), world);
+        // 0.001 is given to fix shadow acne problem
+        if (world.hit(r, interval(0.001, infinity), rec)) {
+
+            // Old random reflection
+            // vec3 direction = random_on_hemisphere(rec.normal);
+
+            // True Lambertian Reflection
+            vec3 direction = rec.normal + random_unit_vector();
+            
+            return 0.5 * ray_color(ray(rec.p, direction), depth-1, world);
         }
 
         auto unit_direction = unit_vector(r.direction());
