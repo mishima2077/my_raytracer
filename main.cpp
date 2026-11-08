@@ -29,7 +29,11 @@ int main(int argc, char *argv[]) {
     // Material initialization
     auto ground_mat = std::make_shared<lambertian>(color(0.8, 0.8, 0.0));
     auto center_mat = std::make_shared<lambertian>(color(0.1, 0.2, 0.5));
-    auto left_mat   = std::make_shared<metal>(color(0.8, 0.8, 0.8), 0.3);
+
+    // Glass ball with air in it
+    auto left_mat   = std::make_shared<dielectric>(1.50);
+    auto bubble_mat = std::make_shared<dielectric>(1.00 / 1.50);
+
     auto right_mat  = std::make_shared<metal>(color(0.8, 0.2, 0.1), 1.0);
 
     // World
@@ -37,6 +41,7 @@ int main(int argc, char *argv[]) {
     world.add(std::make_shared<sphere>(point3( 0.0, -100.5, -1.0), 100.0, ground_mat));
     world.add(std::make_shared<sphere>(point3( 0.0,    0.0, -1.2),   0.5, center_mat));
     world.add(std::make_shared<sphere>(point3(-1.0,    0.0, -1.0),   0.5, left_mat));
+    world.add(std::make_shared<sphere>(point3(-1.0,    0.0, -1.0),   0.4, bubble_mat));
     world.add(std::make_shared<sphere>(point3( 1.0,    0.0, -1.0),   0.5, right_mat));
     
     camera cam;
