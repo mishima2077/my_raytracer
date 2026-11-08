@@ -29,8 +29,8 @@ int main(int argc, char *argv[]) {
     // Material initialization
     auto ground_mat = std::make_shared<lambertian>(color(0.8, 0.8, 0.0));
     auto center_mat = std::make_shared<lambertian>(color(0.1, 0.2, 0.5));
-    auto left_mat   = std::make_shared<metal>(color(0.8, 0.8, 0.8));
-    auto right_mat  = std::make_shared<metal>(color(0.8, 0.2, 0.1));
+    auto left_mat   = std::make_shared<metal>(color(0.8, 0.8, 0.8), 0.3);
+    auto right_mat  = std::make_shared<metal>(color(0.8, 0.2, 0.1), 1.0);
 
     // World
     hittable_list world;
