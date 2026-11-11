@@ -8,7 +8,6 @@
 #include <memory>
 #include <string>
 
-
 int main(int argc, char *argv[]) {
 
     // TODO: Improve here, assert given filename has no extension maybe?

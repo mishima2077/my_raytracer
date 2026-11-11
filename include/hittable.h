@@ -1,15 +1,16 @@
-#ifndef HITTABLE_H
-#define HITTABLE_H
+#pragma once
 
 #include "ray.h"
-#include "vec3.h"
 #include "interval.h"
+#include <memory>
 
 class material;
 
 // p: point of the hit
 // normal: normal vector from center of the object to hit point
 // t: the t where the ray hits the point
+// mat: material of hit object
+// front_face: true -> hit from outside, false -> hit from inside
 class hit_record {
 public:
     point3 p;
@@ -28,12 +29,9 @@ public:
     }
 };
 
-// What is this?
 class hittable {
 public:
     virtual ~hittable() = default;
 
     virtual bool hit(const ray& r, interval ray_t, hit_record& rec) const = 0;
 };
-
-#endif // !HITTABLE_H

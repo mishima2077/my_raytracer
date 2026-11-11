@@ -1,5 +1,4 @@
-#ifndef VEC3_H
-#define VEC3_H
+#pragma once
 
 #include "rtutil.h"
 #include <cmath>
@@ -148,5 +147,3 @@ inline vec3 refract(const vec3& uv, const vec3& n, double etai_over_etat) {
     auto r_out_parallel = -std::sqrt(std::fabs(1 - r_out_perp.length_squared())) * n;
     return r_out_perp + r_out_parallel;
 }
-
-#endif

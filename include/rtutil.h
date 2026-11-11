@@ -1,11 +1,8 @@
-#ifndef RTUTIL_H
-#define RTUTIL_H
+#pragma once
 
 #include <cstdlib>
-#include <cmath>
-#include <iostream>
 #include <limits>
-#include <memory>
+#include <random>
 
 // Constants
 const double infinity = std::numeric_limits<double>::infinity();
@@ -19,12 +16,12 @@ inline double degrees_to_radians(double degrees) {
 
 // Returns a random real number in [0,1).
 inline double random_double() {
-    return std::rand() / (RAND_MAX + 1.0);
+    thread_local std::mt19937 gen(42); 
+    thread_local std::uniform_real_distribution<double> dist(0.0, 1.0);
+    return dist(gen);
 }
 
 // Returns a random real number in [min, max).
 inline double random_double(double min, double max) {
     return (max-min)*random_double() + min;
 }
-
-#endif // !RTUTIL_H

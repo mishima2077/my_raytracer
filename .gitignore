@@ -2,3 +2,7 @@
 
 *.ppm
 renders/
+build/
+test
+
+.clangd
