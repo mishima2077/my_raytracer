@@ -1,7 +1,4 @@
-1) Fix header style development, everything is in a header file I dont like it.
-2) Fix include hell
-3) Write a proper makefile or a CMakeList. Stuff should be built into build/ folder
-4) Images shall render in real time, create a window with glfw or something else. 
-5) Renders shall be put into a renders/ folder. It shall be ignored by default
-6) Switch to compute shaders for faster execution.
-7) Classes sometimes make no sense, for example we have reflet function under vec3 for some reason. Stuff like that. 
+1) Write a proper makefile or a CMakeList. Stuff should be built into build/ folder (~)
+2) Images shall render in real time, create a window with glfw or something else. 
+3) Switch to compute shaders for faster execution.
+4) Classes sometimes make no sense, for example we have reflet function under vec3 for some reason. Stuff like that. 
