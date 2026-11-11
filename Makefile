@@ -21,11 +21,9 @@ $(TARGET): $(OBJS)
 	$(CXX) $(OBJS) -o $@
 
 # Compile: one .cpp -> one .o
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(@D)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
-
-$(BUILD_DIR):
-	mkdir -p $@
 
 NAME ?= image
 
