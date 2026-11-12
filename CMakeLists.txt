@@ -18,6 +18,7 @@ add_executable(raytracer
     src/sphere.cpp
     src/material.cpp
     src/hittable_list.cpp
+    src/window.cpp
 )
 
 target_include_directories(raytracer PRIVATE include)
